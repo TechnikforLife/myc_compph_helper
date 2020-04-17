@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <matrixmem.h>
+#include "matrixmem.h"
 #include <math.h>
 //d=dimension
 //sd=spacedimenion
@@ -18,10 +18,10 @@ int** matrix_alloc_integer(/*number of space dimension=length of each dimension*
 		return NULL;
 	}
 	for(unsigned int i=0;i<dimlen;++i){
-		ptr2matrixdata[i]=ptr2matrixdata_mem+dimlen*i;		
+		ptr2matrixdata[i]=ptr2matrixdata_mem+dimlen*i;
 	}
 	return ptr2matrixdata;
-	
+
 }
 void matrix_free_integer(/*pointer to matrix to free*/	int** ptr2matrixdata){
 	free(ptr2matrixdata[0]);
@@ -101,12 +101,12 @@ void matrix_print_double(/*pointer to matrix to print*/	matrix_t* ptr2matrix){
 		printf("|\n");
 	}
 	printf("\n");
-	
+
 }
 
 
 matrix_t* matrix_id_double(
-	/*matrix to initialize 
+	/*matrix to initialize
 	as unitmatrix*/		matrix_t* ptr2matrix){
 		int len=0;
 	if(ptr2matrix->h_len!=ptr2matrix->v_len){
@@ -120,7 +120,7 @@ matrix_t* matrix_id_double(
 		for(int j=0;j<len;++j){
 			ptr2matrix->data[i][j]=(i==j)?1.:0.; //i=j-> data[i][j]=1
 		}
-	}	
+	}
 	return ptr2matrix;
 }
 
@@ -166,9 +166,9 @@ matrix_t* matrix_quad_multiply(/*first quadratic matrix*/	matrix_t* A,
 			C->data[i][j]=sum;
 			sum=0.;
 		}
-		
+
 	}
-	
+
 	return C;
 }
 
