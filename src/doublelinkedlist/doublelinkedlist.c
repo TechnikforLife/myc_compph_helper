@@ -1,4 +1,4 @@
-#include <dll.h>
+#include "doublelinkedlist.h"
 #include <stdlib.h>
 #include <stdio.h>
 LIST_t *list_create(){
@@ -12,8 +12,8 @@ LIST_t *list_create(){
 	newlist->end=NULL;
 	return newlist;
 }
-LISTNODE_t *list_insert(/*list to insert into*/	LIST_t *L, 
-						/*Node to insert after*/LISTNODE_t *E, 
+LISTNODE_t *list_insert(/*list to insert into*/	LIST_t *L,
+						/*Node to insert after*/LISTNODE_t *E,
 						/*Value to insert*/		double val){
 	if (L==NULL){
 		fprintf(stderr,"Create a List first\n");
@@ -31,7 +31,7 @@ LISTNODE_t *list_insert(/*list to insert into*/	LIST_t *L,
 		newnode->prev=NULL;
 		newnode->next=NULL;
 		L->start=newnode;
-		L->end=newnode;		
+		L->end=newnode;
 	}else{//list with existing elements
 		if(E==NULL){//insert at beginning
 			newnode->next=L->start;
@@ -48,7 +48,7 @@ LISTNODE_t *list_insert(/*list to insert into*/	LIST_t *L,
 			newnode->prev=E;
 			E->next->prev=newnode;
 			E->next=newnode;
-		}			
+		}
 	}
 	return newnode;
 }

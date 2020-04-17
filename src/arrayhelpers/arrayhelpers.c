@@ -1,29 +1,3 @@
-/** 
- *  @file arrayhelpers.c 
- *  @brief Provides functions,to work with integer arrays
- *  @author Dichter nd@nocoffeetech.de 
- * 
- *   
- * 
- *  @date 8.04.2020  	First Implementation of:
- *						output_integer_array, init_integer_array,
- *						rot_1_integer_array, rot_k_integer_array,
- *						reverse_integer_array, search_integer_array,
- *						readfileintarr, writefileintarr					
- *	@date 15.04.2020	First Implementation of:
- *						output_double_array
- * 
- *  @todo change all functions to use intarr_t* (Pointer!)
- * 
- *  @test retest all functions with intarr_t*
- * 
- *  @bug No known bugs  
- * 
- *  @version 0.2
- */
- 
- 
- 
 #include <stdio.h>
 #include "arrayhelpers.h"
 #include <stdlib.h>
@@ -35,21 +9,21 @@ void output_double_array(doublearr_t* arr){
 		if(!(i%5))printf("\n");
 	}
 	printf(" %f}\n",arr->dataptr[arr->length-1]);
-	
+
 }
 
-void output_integer_array(/*array to print*/	const int * arr , 
+void output_integer_array(/*array to print*/	const int * arr ,
 						/*length of arr*/		const int n){
 	printf("Array[%d]={",n);
 	for(int i=0;i<n-1;++i){
 		printf(" %d,",arr[i]);
 	}
 	printf(" %d}\n",arr[n-1]);
-	
+
 }
 
-void init_integer_array(/*array to initialize*/		int * arr , 
-						/*length of arr*/			const int n, 
+void init_integer_array(/*array to initialize*/		int * arr ,
+						/*length of arr*/			const int n,
 					/*value to initialize arr with*/const int initialval){
 
 	for(int i=0;i<n;++i){
@@ -57,67 +31,67 @@ void init_integer_array(/*array to initialize*/		int * arr ,
 	}
 }
 
-void rot_1_integer_array(/*array to rotate*/	int * arr , 
+void rot_1_integer_array(/*array to rotate*/	int * arr ,
 						/*length of arr*/		const int n){
 	int j=arr[n-1]; //saves last value, to put it at the beginning
-	
+
 	for(int i=n-1;i>0;--i){
 		arr[i]=arr[i-1];
-		
+
 	}
 	arr[0]=j;
-	
-	
+
+
 }
 
-void rot_k_integer_array(/*array to rotate*/	int * arr , 
-						/*length of arr*/		const int n, 
+void rot_k_integer_array(/*array to rotate*/	int * arr ,
+						/*length of arr*/		const int n,
 						/*amount of rotations*/	int k){
-	
+
 	//enable negative rotations
 	if(k<0){
 		k=n+k;
 	}
-	
+
 	//temp array to copy the data of arr into
 	int temp[n];
 	for(int i=0;i<n;++i){
 		temp[i]=arr[i];
 	}
-	
+
 	//values from 0 till n-1-k are been writen
 	for(int i=n-1;i>(k-1);--i){
 		arr[i]=temp[i-k];
 	}
-	
+
 	//values from n-k till n-1 are writen
 	for(int i=0;i<k;++i){
 		arr[i]=temp[n-k+i];
 	}
-	
+
 }
 
-void reverse_integer_array(/*array to print*/	int * arr , 
+void reverse_integer_array(/*array to print*/	int * arr ,
 						/*length of arr*/		const int length){
 	int temp;//temp
 	int i, j;//index in first and secnd half to cycle through
-	
+
 	for (i=0,j=length-1;i<j;i++,j--){
-		
+
 		//swap values
-		temp = arr[i];   
+		temp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = temp;
-	}	
+	}
 }
 
-int search_integer_array(/*array to search in*/ const int* arr1, 
-						/*length of arr1*/		const int n1, 
+int search_integer_array(/*array to search in*/ const int* arr1,
+						/*length of arr1*/		const int n1,
 						/*array to search for*/	const int* arr2,
 						/*length of arr2*/		const int n2){
 	int test=0;
 	for(int i=0;i<=(n1-n2);++i){
-		/*only values with possibility to contain 
+		/*only values with possibility to contain
 		arr2 after them are being tested (n1-n2)*/
 		if(arr1[i]==arr2[0]){
 			//if the starting value fits the next values get tested
@@ -132,7 +106,7 @@ int search_integer_array(/*array to search in*/ const int* arr1,
 			if(test){
 				return i;
 			}
-		}		
+		}
 	}
 	return -1;
 }
@@ -146,14 +120,14 @@ intarr_t readfileintarr(/*filename string to read*/ const char* const filename){
 	int len=-1;//len of the read array
 	int n_read=1;//amount of read values each line
 	int* arrmem=NULL;//pointer to the saved values
-	
+
 	//opening of "filename" to read
 	file=fopen(filename,"r+");
 	if(file==NULL){
 		printf("Fileopen Error");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	//reading of values until EOF or wrong format,
 	//to determine the needed array size
 	do{
@@ -164,14 +138,14 @@ intarr_t readfileintarr(/*filename string to read*/ const char* const filename){
 		printf("File read Error: File is not formated correctly!\n");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	//memory allocation
 	arrmem=(int*)malloc(sizeof(int)*len);
 	if(arrmem==NULL){
 		printf("RAM allocation Error");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	//reading of values until EOF or Read error
 	rewind(file);
 	for(int i=0;i<len;++i){
@@ -189,17 +163,17 @@ intarr_t readfileintarr(/*filename string to read*/ const char* const filename){
 }
 void writefileintarr(/*write array*/			intarr_t warr,
 					/*filename string to read*/ const char* const filename){
-	
+
 	int n_write=0;//amount of written values each line
 	FILE* file=NULL;//filestream pointer
-	
+
 	//opening of "filename" to write
 	file=fopen(filename,"w");
 	if(file==NULL){
 		printf("Fileopen Error");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	//writing of values from "warr"
 	for(int i=0;i<warr.length;++i){
 		n_write=fprintf(file,"%10d\n",warr.arrptr[i]);
@@ -207,7 +181,7 @@ void writefileintarr(/*write array*/			intarr_t warr,
 			printf("File write Error!Element:%d,n:%d\n",i,n_write);
 		}
 	}
-	
+
 	//cleanup
 	fclose(file);
 }
