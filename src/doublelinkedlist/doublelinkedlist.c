@@ -72,8 +72,10 @@ double list_shift(LIST_t *L){
 	double tempdouble=0.;
 	LISTNODE_t* temp=NULL;
 	tempdouble=L->start->data;
-	L->start->next->prev=L->start->prev;
 	temp=L->start;
+  if(L->start->next!=NULL){
+    L->start->next->prev=L->start->prev;
+  }
 	L->start=temp->next;
 	free(temp);
 	return tempdouble;
