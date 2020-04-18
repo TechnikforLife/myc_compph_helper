@@ -7,7 +7,7 @@
  * 
  *  @date 15.04.2020  	First Implementation of:
  *						kumulativ_quadratic_sum			
- *						
+ *	@date 18.04.2020    Changed kumulativ_quadratic_sum to return array
  * 
  *  @todo -
  * 
@@ -15,7 +15,7 @@
  * 
  *  @bug No known bugs  
  * 
- *  @version 0.1   
+ *  @version 0.12
  */
 
 #ifndef SIMPLEMATFCTNS_H
@@ -26,9 +26,9 @@
  * @brief calculates the kumulativ quadtratic sum of the given array
 
  *
- * @param arr1 Pointer to integer array to search for
+ * @param arr Array to calculate the quadtratic sum of
  *
- * @return Starting position of "arr1" in arr" or -1
+ * @return Array with qudratic sums
  */
-double kumulativ_quadratic_sum(doublearr_t* arr);
+doublearr_t* kumulativ_quadratic_sum(doublearr_t* arr);
 #endif //ifndef SIMPLEMATFCTNS_H
