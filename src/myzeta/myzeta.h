@@ -1,6 +1,6 @@
 /** 
- *  @file error_handler.h 
- *  @brief Provides functions,to handle errors
+ *  @file myzeta.h 
+ *  @brief Provides functions,to calculate zeta
  *  @author Dichter nd@nocoffeetech.de 
  * 
  *   

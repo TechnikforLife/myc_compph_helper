@@ -8,24 +8,25 @@
  *  @date 14.04.2020  	First Implementation of:
  *						fatal_error, fatal_file_error 
  *						file_error_t, memory_error_t, string_error_t 
- *						
+ *	@date 19.04.2020	Added support for General Memory Manager
+ * 						and file/line support
  * 
- *  @todo prevent memory leak on error
+ *  @todo -
  * 
- *  @test test different memory leak preventions
+ *  @test ../test/test_error_handler.c
  * 
  *  @bug No known bugs  
  * 
- *  @version 0.1   
+ *  @version 0.2
  */
  
  
  
 #ifndef ERROR_HANDLER_H
 #define ERROR_HANDLER_H
+
 #include <stdio.h>
-
-
+#include "../generalmemorymanager/generalmemorymanager.h"
 
 /**
  * @typedef typedef enum file_error_t
@@ -37,19 +38,6 @@ typedef enum file_error_t {
   FILE_WRITE_ERROR = 57,
   FILE_GENERAL_STREAM_ERROR = 58
 } file_error_t;
-
-
-
-/**
- * @typedef typedef enum memory_error_t 
- * @brief Typedefinition of a enum to name memory error types
- */
-typedef enum memory_error_t { 
-  MEMORY_ALLOCATION_ERROR = 40,
-  MEMORY_REALLOCATION_ERROR = 41
-} memory_error_t;
-
-
 
 /**
  * @typedef typedef enum string_error_t 
@@ -63,22 +51,26 @@ typedef enum string_error_t {
 
 
 /**
- * @fn void fatal_error(const int condition,const char* message, const int errorcode,const char * fct);
+ * @fn void fatal_error(const int condition,const char* message, 
+				 const int errorcode,char const * fct,char const * file,int line);
  * @brief Function to take action in case of a fatal error
  *
- * condition is beeing tested: If it is True (!=0), the case of fatal error is met.
- * In case of a fatal error the "message","fct"(should be name of the calling function) 
- * and the "errorcode" are being displayed on stderr and the execution exits with code: "errorcode"
+ * condition is beeing tested:If it is True (!=0),the case of fatal error is met
+ * In case of a fatal error the "message" gets displayed on stderr with generell
+ * info and the execution exits with code: "errorcode"
+ * Prevents memory leaks if using generalmemorymanager.
  *
  * @param condition True=fatal error,False no fatal error
  * @param message General message as String to be displayed, if condition=True
  * @param errorcode Errorcode to use, if condition=True
  * @param fct Should be a String of the name of the calling function
+ * @param file Should be a String of the name of the calling file
+ * @param line Should be a integer of the calling line
  *
  * @return Pointer to newly allocated string, read from filename
  */
-void fatal_error(const int condition,const char* message, const int errorcode,const char * fct);
-
+void fatal_error(const int condition,const char* message, const int errorcode,
+				 char const * fct,char const * file,int line);
 
 
 /**

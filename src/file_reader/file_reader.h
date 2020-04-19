@@ -9,7 +9,7 @@
  *	@date 15.04.2020	First Implementation of:
  *						readdataset_l
  * 
- *  @todo implement function to read csv
+ *  @todo implement function to read csv, merge normal and binary reader
  * 
  *  @test readbyline test with different newline formats
  * 

@@ -16,6 +16,8 @@
  * 						mem_backfree,mem_backfreeall,
  * 						mem_searcher
  * 						Initial testing was successful!
+ * 	@date 19.04.2020	Added check in mem_backbone rather 
+ * 						all_mem_blocks is set/initialcall
  *
  *
  *  @todo add function to allocate memory block and split it into sections
@@ -25,7 +27,7 @@
  *
  *  @bug No known bugs
  *
- *  @version 1.0
+ *  @version 1.1
  */
 
 #ifndef GENERALMEMORYMANAGER_H
@@ -59,7 +61,8 @@ typedef enum mem_exitcode_t {
 	ERR_REALLOCATION = 52,
 	ERR_POINTERNOTFOUND = 53,
 	ERR_POINTERMISSING = 54,
-	ERR_POINTEROVERHEAD = 55
+	ERR_POINTEROVERHEAD = 55,
+	ERR_ALL_MEM_BLOCKS_NOT_DEFINED = 56
 } mem_exitcode_t;
 
 

@@ -63,6 +63,14 @@ void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
 	static int memory_len;
 	static int amount_elements;
 	static void** all_mem_blocks;
+	/**
+	 * @note Test rather this is the initial call
+	 */
+	if(all_mem_blocks==NULL&&instruction!=MEM_INITIALIZE){
+		printf("[WARNING] Use of General memory manager without"
+				" Initialization\n");
+		mem_init();
+	}
 	mem_exitcode_t exitcode;
 	int try=0;
 	void * retpointer=NULL;
