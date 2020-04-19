@@ -9,7 +9,7 @@
  *						output_integer_array, init_integer_array,
  *						rot_1_integer_array, rot_k_integer_array,
  *						reverse_integer_array, search_integer_array,
- *						readfileintarr, writefileintarr,						
+ *						readfileintarr, writefileintarr,
  *						intarr_t
  *	@date 15.04.2020	First Implementation of:
  *						output_double_array,
