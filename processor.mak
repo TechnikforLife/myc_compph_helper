@@ -1,9 +1,19 @@
+# General settings:
+PROFILING := -pg
+
 # Compiler settings:
 CC := gcc
-CFLAGS := -c -g -ggdb -Wall -Wpedantic
+CFLAGS = -c
+DEBUG := -ggdb
+WARNING := -Wall -Wpedantic
+OPTIMIZATION := -Og
+CFLAGS += $(PROFILING) $(DEBUG) $(WARNING) $(OPTIMIZATION)
 
 # Linker settings:
-LDFLAGS := -g -lm
+LDFLAGS =
+LIBS := -lm
+LDFLAGS += $(PROFILING) $(LIBS)
+
 
 # Directories:
 OBJDIR := obj
@@ -25,6 +35,8 @@ list-variables:
 	@echo cfiles=$(cfiles)
 	@echo objects=$(objects)
 	@echo deps=$(deps)
+	@echo CFLAGS=$(CFLAGS)
+	@echo LDFLAGS=$(LDFLAGS)
 
 $(OBJDIR)/%.d : $(SRCDIR)/%.c
 	mkdir -p $(@D)
@@ -49,7 +61,7 @@ $(DISTDIR)/$(EXECUTIONFILE).zip: $(BINDIR)/$(EXECUTIONFILE)
 
 dist: $(DISTDIR)/$(EXECUTIONFILE).zip
 
-
+# Builder will call this to install the application before running.
 install:
 	echo "Installing is not supported"
 
