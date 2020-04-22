@@ -28,7 +28,32 @@
  *
  * @param arr Array to calculate the quadtratic sum of
  *
- * @return Array with qudratic sums
+ * @return Array with quadratic sums
  */
 doublearr_t* kumulativ_quadratic_sum(doublearr_t* arr);
+
+
+
+/**
+ * @fn double gammafunction(double z,double precision);
+ * @brief calculates the gamma function at z with the given precision
+ *
+ * @param z Point of interest
+ * @param precision Needed precision
+ *
+ * @return gamma(z)
+ */
+double gammafunction(double z,double precision);
+
+
+
+/**
+ * @fn double gammahelp(double* variables);
+ * @brief Helpfunction needed for gammafunction
+ *
+ * @param variables Array of the variables
+ *
+ * @return exp(-variables[0])*pow(variables[0],variables[1]-1)
+ */
+double gammahelp(double* variables);
 #endif //ifndef SIMPLEMATFCTNS_H

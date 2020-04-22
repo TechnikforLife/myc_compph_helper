@@ -236,35 +236,39 @@ double integrate(double* weights,double* x_sampling_points,int n,
  * @param end End value of the integral
  * @param fp Math function pointer to function to integrate
  * @param n Amount of subintervalls in ["start","end"]
+ * @param variables Array of the variables
  * 
  * @return Value of the approximated integral
  */
-double integratetrapez(double start,double end,double (*fp)(double),
-					   unsigned int n);
+double integratetrapez(double start,double end,double (*fp)(double*),
+					   unsigned int n,double* variables);
 
 
 
 /**
- * @fn double convergeintegrate(double start,double end,double (*fp)(double),
- * 		double precision,
- * 		double (*integrate_fp)(double,double,double(*fp)(double),unsigned int));
+ * @fn double convergeintegrate_homogenstepcount(double start,double end,
+ * 				double (*fp)(double),double precision,const int startisminfty,
+ * 				const int endisinfty);
  * @brief approximates the integral of "fp" to the specifed "precision"
  *
- * Approximates the integral of "fp" using "integrate_fp"
+ * Approximates the integral of "fp" using "integratetrapez"
  * and the specifed "precision"
  * The given function ("fp") needs to have 1 dimensional In- and Output.
  * 
  * @param start Start value of the integral
  * @param end End value of the integral
  * @param fp Math function pointer to function to integrate
- * @param precision Difference between different subintervall trys
+ * @param precision Relative precision
  * @param integrate_fp Function to use to integrate
+ * @param startisminfty Say rather the start is -infty
+ * @param endisinfty Say rather the end is infty
+ * @param variables Array of the variables
  * 
  * @return Value of the approximated integral
  */
-double convergeintegrate(double start,double end,double (*fp)(double),
-		double precision,
-		double (*integrate_fp)(double,double,double(*fp)(double),unsigned int));
+double convergeintegrate_homogenstepcount(double start,double end,
+		double (*fp)(double*),double precision,
+		const int startisminfty,const int endisinfty,double* variables);
 
 
 #endif //ifndef MATFPFCTNS_H

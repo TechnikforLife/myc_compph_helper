@@ -10,6 +10,13 @@ double f(double x){
 double f_deriv(double x){
 	return symfirstderivativeoptimized(x,f);
 }
+double f2(double x){
+	return pow(x,-3);
+}
+
+double g(double x){
+	return exp(-pow(fabs(x),0.1));
+}
 int main (int argc, char *argv[]){
 	double x_0=3.;
 	double h=1.;
@@ -81,13 +88,16 @@ int main (int argc, char *argv[]){
 	 */
 	double root=rootmodifiedsecant (6, f_deriv, 1e-8);
 	double realval=f_deriv(root);
-	printf("Root: %e\tRealvalue: %e\n", root,realval);
+	printf("Root: %e\tRealvalue: %.20e\n", root,realval);
 	root=rootbisection (1,6, f_deriv, 1e-8);
 	realval=f_deriv(root);
-	printf("Root: %e\tRealvalue: %e\n", root,realval);
+	printf("Root: %e\tRealvalue: %.20e\n", root,realval);
 	/**
 	 * @note Part3:
 	 */
-	printf("%.15e\n", convergeintegrate (0, 3.14, sin, 1e-10, integratetrapez));
-	EXIT_SUCCESS;
+	//printf("%.15e\n----------\n", convergeintegrate (0, 3.14, sin, 1e-10,0, 0, integratetrapez));
+	printf("Gamma(%e)=%e\n",-36.87,gammafunction (-36.87, 1e-4) );
+	//printf("%e?=%e\n",0.5,convergeintegrate_homogenstepcount (1,10,f2, 1e-4,0,1) );
+	//printf("%e?=%e\n",2.,convergeintegrate_homogenstepcount (1,10,g, 1e-4,1,1) );
+	return EXIT_SUCCESS;
 }
