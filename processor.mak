@@ -11,7 +11,7 @@ CFLAGS += $(PROFILING) $(DEBUG) $(WARNING) $(OPTIMIZATION)
 
 # Linker settings:
 LDFLAGS =
-LIBS := -lm
+LIBS := -lm -lgsl -lblas
 LDFLAGS += $(PROFILING) $(LIBS)
 
 

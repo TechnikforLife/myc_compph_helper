@@ -1,0 +1,11 @@
+[default]
+name=Default
+runtime=host
+config-opts=
+run-opts=
+prefix=/home/nico/.cache/gnome-builder/install/myc_compph_helper/host
+app-id=
+postbuild=
+prebuild=
+default=true
+toolchain=gcc:/usr/bin/x86_64-unknown-linux-gnu-gcc

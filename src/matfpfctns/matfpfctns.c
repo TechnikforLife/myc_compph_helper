@@ -121,7 +121,7 @@ double rootsecant(double a,double b,double (*fp)(double),double precision){
 	 */
 	for(i=0;i<10000;i++){
 		x_ip1=x_i+(fp(x_i)*(x_im1-x_i))/(fp(x_i)-fp(x_im1));
-		if(fabs(fp(x_ip1)-fp(x_i))<precision){
+		if(fabs(x_ip1-x_i)<precision){
 			break;
 		}
 		x_im1=x_i;
@@ -152,7 +152,7 @@ double rootmodifiedsecant(double start,double (*fp)(double),double precision){
 	 */
 	for(i=0;i<10000;i++){
 		x_ip1=x_i-fp(x_i)/symfirstderivativeoptimized(x_i, fp);
-		if(fabs(fp(x_ip1)-fp(x_i))<precision){
+		if(fabs(x_ip1-x_i)<precision){
 			break;
 		}
 		x_i=x_ip1;
@@ -223,7 +223,7 @@ double rootbisection(double start,double end, double(*fp)(double),
 			fprintf(stderr,"Sign error: No sign change found!\n");
 			return next;
 		}
-		if(fabs(fpofupper-fpoflower)<precision){
+		if(fabs(upper-lower)<precision){
 			break;
 		}
 	}
