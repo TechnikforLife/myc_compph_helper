@@ -23,8 +23,8 @@
  */
 #define MAXTRIES 5
 
-void* mem_init(void){
-	return mem_backbone (MEM_INITIALIZE,NULL,0);
+void* mem_init(int showinfo){
+	return mem_backbone (MEM_INITIALIZE,NULL,showinfo);
 }
 
 void* mem_alloc(size_t size){
@@ -46,7 +46,7 @@ void mem_free_all(void){
 }
 
 void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
-					size_t size){
+					size_t parameter){
 	/**
 	 * Declarations:
 	 *
@@ -63,13 +63,14 @@ void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
 	static int memory_len;
 	static int amount_elements;
 	static void** all_mem_blocks;
+	static int showinfo;
 	/**
 	 * @note Test rather this is the initial call
 	 */
 	if(all_mem_blocks==NULL&&instruction!=MEM_INITIALIZE){
 		printf("[WARNING] Use of General memory manager without"
 				" Initialization\n");
-		mem_init();
+		mem_init(1);
 	}
 	mem_exitcode_t exitcode;
 	int try=0;
@@ -88,33 +89,43 @@ void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
 		switch (instruction)
 		{
 		case MEM_INITIALIZE:
-			printf("[INFO] Beginning memory manager Initialization\n");
+			if(parameter){
+				printf("[INFO] Beginning memory manager Initialization\n");
+			}
 			mem_backinit(&memory_len,&amount_elements,
-							&all_mem_blocks,&exitcode);
+							&all_mem_blocks,&exitcode,&showinfo,parameter);
 			retpointer=all_mem_blocks;
 			break;
 		case MEM_ALLOCATION:
-			printf("[INFO] Beginning memory allocation of size: %ld\n",
-					size);
+			if(showinfo){
+				printf("[INFO] Beginning memory allocation of size: %ld\n",
+					parameter);
+			}
 			retpointer=mem_backalloc (&memory_len, &amount_elements,
-							  &all_mem_blocks, &exitcode, size);
+							  &all_mem_blocks, &exitcode, parameter);
 			break;
 		case MEM_REALLOCATION:
-			printf("[INFO] Beginning memory reallocation of size %ld at"
-					"%p\n", size,pointer2process);
+			if(showinfo){
+				printf("[INFO] Beginning memory reallocation of size %ld at"
+					"%p\n", parameter,pointer2process);
+			}
 			retpointer=mem_backrealloc(&memory_len, &all_mem_blocks,
-								&exitcode, size ,pointer2process);
+								&exitcode, parameter ,pointer2process);
 			break;
 		case MEM_FREE:
-			printf("[INFO] Beginning to free memory block at %p\n",
+			if(showinfo){
+				printf("[INFO] Beginning to free memory block at %p\n",
 					pointer2process);
+			}
 			mem_backfree(&memory_len, &amount_elements, &all_mem_blocks, 
 						 &exitcode,pointer2process);
 			break;
 		case MEM_FREEALL:
-			printf("[INFO] Beginning to free all memory blocks\n");
+			if(showinfo){
+				printf("[INFO] Beginning to free all memory blocks\n");
+			}
 			mem_backfreeall(&memory_len, &amount_elements, &all_mem_blocks, 
-						 &exitcode);
+						 &exitcode,&showinfo);
 			break;
 		}
 #ifdef DEBUG_CTRL
@@ -135,7 +146,8 @@ void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
 }
 
 void mem_backinit(int* memory_len_ptr,int* amount_elements_ptr,
-				void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr){
+				void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr,
+				int* showinfo_ptr,int parameter){
 	/**
 	 * @note	"memory_len,amount_elements" get initialized and 
 	 *			memory gets allocate for "all_mem_blocks".
@@ -143,6 +155,7 @@ void mem_backinit(int* memory_len_ptr,int* amount_elements_ptr,
 	 *			gets registered in all_mem_blocks(allways at position 0)
 	 * 
 	 */
+	*showinfo_ptr=1;
 	*memory_len_ptr=1;
 	*amount_elements_ptr=1;
 	*all_mem_blocks_ptr=malloc(sizeof (void*)*(*memory_len_ptr));
@@ -152,6 +165,9 @@ void mem_backinit(int* memory_len_ptr,int* amount_elements_ptr,
 		return ;
 	}
 	(*all_mem_blocks_ptr)[0]=*all_mem_blocks_ptr;
+	if(parameter==0){
+		*showinfo_ptr=0;
+	}
 	return ;
 }
 
@@ -272,7 +288,8 @@ void mem_backfree(int* memory_len_ptr,int* amount_elements_ptr,
 }
 
 void mem_backfreeall(int* memory_len_ptr,int* amount_elements_ptr,
-				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr){
+				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr,
+				  int* showinfo_ptr){
 	/**
 	 * Declarations:
 	 *
@@ -307,7 +324,9 @@ void mem_backfreeall(int* memory_len_ptr,int* amount_elements_ptr,
 	*all_mem_blocks_ptr=NULL;
 	*amount_elements_ptr=0;
 	*memory_len_ptr=0;
-	printf("[INFO] Freed all memory blocks\n");
+	if(*showinfo_ptr){
+		printf("[INFO] Freed all memory blocks\n");
+	}
 	return;
 }
 

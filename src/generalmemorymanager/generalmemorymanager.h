@@ -68,18 +68,19 @@ typedef enum mem_exitcode_t {
 
 
 /**
- * @fn int mem_init(void);
+ * @fn int mem_init(int showinfo);
  * @brief Initializes the memorymanager
  *
  * Calls mem_backbone to initialize the memory manager.
  * In particular the array of
  * pointers to allocated memory blocks gets initialized.
  *
- *
+ * @param showinfo Rather info messages should be shown
+ * 
  * @return Pointer to array of Pointers to allocated memory blocks
  *
  */
-void* mem_init(void);
+void* mem_init(int showinfo);
 
 
 
@@ -147,7 +148,7 @@ void mem_free_all(void);
 
 /**
  * @fn void* mem_backbone(const mem_instruction_t instruction,\
-						void* pointer, size_t size);
+						void* pointer, size_t parameter);
  * @brief Handles all memory interactions (should never be called directly)
  *
  * Handles all memory interactions and hands them off to mem_backinit,
@@ -155,19 +156,20 @@ void mem_free_all(void);
  *
  * @param instruction Tells, which functionality is needed
  * @param pointer2process Pointer to be processed
- * @param size Size of the needed memory block
+ * @param parameter Size of the needed memory block or other options
  *
  * @return Pointer to the (re)allocated memory block \
 			/array of pointers to all memory blocks
  */
 void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
-			 size_t size);
+			 size_t parameter);
 
 
 
 /**
  * @fn void mem_backinit(int* memory_len_ptr,int* amount_elements_ptr,\
-						void*** all_mem_blocks_ptr,int* exitcode_ptr);
+ * 						void*** all_mem_blocks_ptr,int* exitcode_ptr,
+ * 						int* showinfo_ptr,int parameter);
  * @brief Initializes the array of pointers to allocated memory blocks\
 						(should never be called directly)
  *
@@ -181,7 +183,8 @@ void* mem_backbone(const mem_instruction_t instruction,void* pointer2process,
  * @param exitcode_ptr Exitcode address (needed in later error processing)
  */
 void mem_backinit(int* memory_len_ptr,int* amount_elements_ptr,
-				void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr);
+				void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr,
+				int* showinfo_ptr,int parameter);
 
 
 
@@ -258,7 +261,8 @@ void mem_backfree(int* memory_len_ptr,int* amount_elements_ptr,
 
 /**
  * @fn void mem_backfreeall(int* memory_len_ptr,int* amount_elements_ptr,
-				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr);
+ * 				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr,
+ * 				  int* showinfo_ptr);
  * @brief Frees all memory blocks (should never be called directly)
  *
  * Frees all memory blocks 
@@ -271,7 +275,8 @@ void mem_backfree(int* memory_len_ptr,int* amount_elements_ptr,
  * @param exitcode_ptr Exitcode address (needed in later error processing)
  */
 void mem_backfreeall(int* memory_len_ptr,int* amount_elements_ptr,
-				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr);
+				  void*** all_mem_blocks_ptr,mem_exitcode_t* exitcode_ptr,
+				  int* showinfo_ptr);
 
 
 
