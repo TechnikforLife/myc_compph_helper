@@ -52,3 +52,39 @@ double gausslegendre_integration(double (*func)(double),
 	mem_free (xilist);
 	return integralapprox;
 }
+
+double converge_integrate(double (*func)(double), double lowerbound, 
+						  double upperbound,double relprecision,
+						  double (*method)(double (*fp)(double),double lb,
+						  double ub,int n)){
+	/**
+	 * Declarations:
+	 * 
+	 * @var i 		itterration variable
+	 * @var k		current amount of sampling points
+	 * @var imax	maximum itterrations
+	 * @var prev	previous value of the integral
+	 * @var current	current value of the integral
+	 */
+	int i,k=4,imax=20;
+	double prev;
+	double current;
+	
+	/**
+	 * @note	double the amount of sampling points until the needed precision
+	 * 			is reached or itteration maximum is reached
+	 */
+	current=method(func,lowerbound,upperbound,k);
+	for(i=0;i<imax;i++){
+		k+=2;
+		prev=current;
+		current=method(func,lowerbound,upperbound,k);
+		if(fabs(prev-current)<fabs(relprecision*prev)){
+			break;
+		}
+	}
+	if(i==imax){
+		printf ("[WARNING] Could not reach required precision\n");
+	}
+	return current;
+}
