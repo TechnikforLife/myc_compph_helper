@@ -7,6 +7,9 @@
  * 
  *  @date 28.04.20	Reorganisation of functions from matfpfctns 
  * 					to integrate_trapez
+ * 					Added relative precision stop to integratetrapez
+ * 					Optimized convergeintegrate_homogenstepcount and
+ * 					integratetrapez
  * 
  *  @todo -
  * 
@@ -36,8 +39,9 @@ double integrate(double* weights,double* x_sampling_points,int n,
 
 
 /**
- * @fn double integratetrapez(double start, double end,double (*fp)(double), 
- * unsigned int n);
+ * @fn double integratetrapez(double start,double end,double (*fp)(double*),
+ * 					   unsigned int n,double* variables,
+ * 					   double relprecision,int useprecision)
  * @brief approximates the integral of "fp" by trapezsum
  *
  * Approximates the integral of "fp" by trapezsum
@@ -49,11 +53,16 @@ double integrate(double* weights,double* x_sampling_points,int n,
  * @param fp Math function pointer to function to integrate
  * @param n Amount of subintervalls in ["start","end"]
  * @param variables Array of the variables
+ * @param relprecision Relativ precision to use, can be helpful 
+ * 						if integrating to infty
+ * @param useprecision Rather the integration should be stopped if the needed 
+ * 						precision is reached
  * 
  * @return Value of the approximated integral
  */
 double integratetrapez(double start,double end,double (*fp)(double*),
-					   unsigned int n,double* variables);
+					   unsigned int n,double* variables,
+					   double relprecision,int useprecision);
 
 
 
@@ -70,7 +79,7 @@ double integratetrapez(double start,double end,double (*fp)(double*),
  * @param start Start value of the integral
  * @param end End value of the integral
  * @param fp Math function pointer to function to integrate
- * @param precision Relative precision
+ * @param relprecision Relative precision
  * @param integrate_fp Function to use to integrate
  * @param startisminfty Say rather the start is -infty
  * @param endisinfty Say rather the end is infty
@@ -79,7 +88,7 @@ double integratetrapez(double start,double end,double (*fp)(double*),
  * @return Value of the approximated integral
  */
 double convergeintegrate_homogenstepcount(double start,double end,
-		double (*fp)(double*),double precision,
+		double (*fp)(double*),double relprecision,
 		const int startisminfty,const int endisinfty,double* variables);
 
 

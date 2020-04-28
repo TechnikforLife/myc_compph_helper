@@ -17,42 +17,65 @@ double integrate(double* weights,double* x_sampling_points,int n,
 
 
 double integratetrapez(double start,double end,double (*fp)(double*),
-					   unsigned int n,double* variables){
+					   unsigned int n,double* variables,
+					   double relprecision,int useprecision){
 	/**
 	 * Declarations:
 	 * 
 	 * @var intervalllength 	length of the complet interval
 	 * @var subintervalllength	length of the subinterval
 	 * @var sum					value of the sum
-	 * @var temp_f_x_i			initalized with f(x_0)
-	 * @var f_x_i1				f(x_(i+1))
+	 * @var f_x_i				f(x_i)
 	 */
 			
 	double intervalllength=end-start;
 	double subintervalllength=intervalllength/n;
 	double sum=0.0;
-	variables[0]=start;
-	double temp_f_x_i=(*fp)(variables);
-	double f_x_i1=0.0;
+	double f_x_i=0.0;
 	
 	/**
-	 * @note In each step: 	Calculate f(x_(i+1)) and 
-	 * 						save f(x_(i+1)) for next itteration step
-	 * 						Stop if the 
+	 * @note	Calculate f(x_0) and at it to the sum with weight 0.5
 	 */
-	for(int i=0;i<n;i++){
-		variables[0]=start+(i+1)*subintervalllength;
-		f_x_i1=(*fp)(variables);
-		sum+=temp_f_x_i+f_x_i1;
-		temp_f_x_i=f_x_i1;
+	variables[0]=start;
+	sum=(*fp)(variables)/2.;
+	
+	/**
+	 * @note	Test rather the precision stop shoulb be used
+	 * 			In either cases the f(x_i) i in [1,n-1] get calulated and 
+	 * 			added to the sum.
+	 * 			In case of using the precision stop:
+	 * 				If the precision is reached the approximation 
+	 * 				of the integral is returned
+	 * 			At the end f(x_n) is being calculated and 
+	 * 			added to the sum with weight 0.5
+	 */
+	if(useprecision){
+		for(int i=1;i<n;i++){
+			variables[0]=start+(i)*subintervalllength;
+			f_x_i=(*fp)(variables);
+			sum+=f_x_i;
+			if(fabs(f_x_i)<fabs(sum*relprecision)){
+				return sum*subintervalllength;
+			}
+		}
+	}else{
+		for(int i=1;i<n;i++){
+			variables[0]=start+(i)*subintervalllength;
+			f_x_i=(*fp)(variables);
+			sum+=f_x_i;
+		
+			
+		}
 	}
-	return sum*subintervalllength/2.;
+	variables[0]=start+(n)*subintervalllength;
+	sum+=(*fp)(variables)/2.;
+	return sum*subintervalllength;
 }
 
 
 
 double convergeintegrate_homogenstepcount(double start,double end,
-		double (*fp)(double*),double precision,
+		double (*fp)(double*),double relprecision,
 		const int startisminfty,const int endisinfty,double* variables){
 	/**
 	 * Declarations:
@@ -80,7 +103,7 @@ double convergeintegrate_homogenstepcount(double start,double end,
 	 * 			the step count is increased appropriatly, 
 	 * 			to stay at approximatly the same step size
 	 */
-	oldb_steps=integratetrapez(start,end,fp,n,variables);
+	oldb_steps=integratetrapez(start,end,fp,n,variables,0.,0);
 	oldb_end=oldb_steps;
 	oldb_start=oldb_steps;
 	if(endisinfty){
@@ -91,7 +114,7 @@ double convergeintegrate_homogenstepcount(double start,double end,
 		start=-fabs(start)*2;
 		n+=(int)(end/2*n/(end/2-start))+1;
 	}
-	new=integratetrapez(start,end,fp,n,variables);	//new value
+	new=integratetrapez(start,end,fp,n,variables,0.,0);	//new value
 	
 	/**
 	 * @note	If no boundary is infty,
@@ -105,11 +128,11 @@ double convergeintegrate_homogenstepcount(double start,double end,
 	 * 			to stay at approximatly the same step size.
 	 */
 	do{
-		if(endisinfty&&fabs(new-oldb_end)>precision*new){
+		if(endisinfty&&fabs(new-oldb_end)>fabs(relprecision*new)){
 			oldb_end=new;
 			tester=1;
-			new=integratetrapez(start,end*2,fp,n*2,variables);
-			while(fabs(new-oldb_end)>precision*new){
+			new=integratetrapez(start,end*2,fp,n*2,variables,0.,0);
+			while(fabs(new-oldb_end)>fabs(relprecision*new)){
 				oldb_end=new;
 				if(tester){
 					n+=(int)(end*n/(end-start))+1;
@@ -118,14 +141,14 @@ double convergeintegrate_homogenstepcount(double start,double end,
 				}
 				n+=(int)(end*n/(end-start))+1;
 				end*=2;
-				new=integratetrapez(start,end,fp,n,variables);
+				new=integratetrapez(start,end,fp,n,variables,0.,0);
 			}
 		}
-		if(startisminfty&&fabs(new-oldb_start)>precision*new){
+		if(startisminfty&&fabs(new-oldb_start)>fabs(relprecision*new)){
 			oldb_start=new;
 			tester=1;
-			new=integratetrapez(start*2,end,fp,n*2,variables);
-			while(fabs(new-oldb_start)>precision*new){
+			new=integratetrapez(start*2,end,fp,n*2,variables,0.,0);
+			while(fabs(new-oldb_start)>fabs(relprecision*new)){
 				oldb_start=new;
 				if(tester){
 					n+=(int)(end*n/(end-start))+1;
@@ -134,12 +157,12 @@ double convergeintegrate_homogenstepcount(double start,double end,
 				}
 				n+=(int)(end*n/(end-start))+1;
 				start*=2;
-				new=integratetrapez(start,end,fp,n,variables);
+				new=integratetrapez(start,end,fp,n,variables,0.,0);
 			}
 		}
 		oldb_steps=new;
 		n*=2;
-		new=integratetrapez(start,end,fp,n,variables);
-	}while(fabs(new-oldb_steps)>precision*new);
+		new=integratetrapez(start,end,fp,n,variables,0.,0);
+	}while(fabs(new-oldb_steps)>fabs(relprecision*new));
 	return new;
 }

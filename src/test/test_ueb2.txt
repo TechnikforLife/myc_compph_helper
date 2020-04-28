@@ -1,6 +1,8 @@
 #include "../generalmemorymanager/generalmemorymanager.h"
 #include "../error_handler/error_handler.h"
-#include "../matfpfctns/matfpfctns.h"
+#include "../derivatives/derivatives.h"
+#include "../integrate_trapez/integrate_trapez.h"
+#include "../function_roots/function_roots.h"
 #include "../simplematfctns/simplematfctns.h"
 #include <math.h>
 double f(double x){
@@ -10,12 +12,12 @@ double f(double x){
 double f_deriv(double x){
 	return symfirstderivativeoptimized(x,f);
 }
-double f2(double x){
-	return pow(x,-3);
+double f2(double* variables){
+	return pow(variables[0],-3);
 }
 
-double g(double x){
-	return exp(-pow(fabs(x),0.1));
+double g(double* variables){
+	return exp(-pow(fabs(variables[0]),0.1));
 }
 int main (int argc, char *argv[]){
 	double x_0=3.;
@@ -95,9 +97,10 @@ int main (int argc, char *argv[]){
 	/**
 	 * @note Part3:
 	 */
-	//printf("%.15e\n----------\n", convergeintegrate (0, 3.14, sin, 1e-10,0, 0, integratetrapez));
+	//printf("%.15e\n----------\n", convergeintegrate_homogenstepcount (0, 3.14, sin, 1e-10,0, 0, integratetrapez));
 	printf("Gamma(%e)=%e\n",-36.87,gammafunction (-36.87, 1e-4) );
-	//printf("%e?=%e\n",0.5,convergeintegrate_homogenstepcount (1,10,f2, 1e-4,0,1) );
-	//printf("%e?=%e\n",2.,convergeintegrate_homogenstepcount (1,10,g, 1e-4,1,1) );
+	double xvar[1];
+	printf("%e?=%e\n",0.5,convergeintegrate_homogenstepcount (1,10,f2, 1e-4,0,1,xvar) );
+	//printf("%e?=%e\n",2.,convergeintegrate_homogenstepcount (1,10,g, 1e-4,1,1,xvar) );
 	return EXIT_SUCCESS;
 }
