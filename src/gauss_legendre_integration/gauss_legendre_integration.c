@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "../error_handler/error_handler.h"
 #include "../generalmemorymanager/generalmemorymanager.h"
-#include "../matfpfctns/matfpfctns.h"
+#include "../integrate_trapez/integrate_trapez.h"
 
 double gausslegendre_integration(double (*func)(double),
 						double lowerbound, double upperbound,int n){

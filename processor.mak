@@ -31,6 +31,7 @@ deps := $(objects:.o=.d)
 all: $(BINDIR)/$(EXECUTIONFILE)
 -include $(deps)
 
+# List all make variables
 list-variables:
 	@echo cfiles=$(cfiles)
 	@echo objects=$(objects)
@@ -38,22 +39,24 @@ list-variables:
 	@echo CFLAGS=$(CFLAGS)
 	@echo LDFLAGS=$(LDFLAGS)
 
+# generate dependencies
 $(OBJDIR)/%.d : $(SRCDIR)/%.c
 	mkdir -p $(@D)
 	@echo finding headers of $< ...
 	$(CC) -MM -MT "$@ $(patsubst %.d,%.o,$@)" -MF $@ $<
 
+# compiling
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@echo compiling $< ...
 	$(CC) $(CFLAGS) $< -o $@
 
-
-
+# linking
 $(BINDIR)/$(EXECUTIONFILE) : $(objects) processor.mak Makefile
 	@echo linking $@ ...
 	mkdir -p $(BINDIR)
 	$(CC) -o $@ $(objects) $(LDFLAGS)
 
+#distribute
 $(DISTDIR)/$(EXECUTIONFILE).zip: $(BINDIR)/$(EXECUTIONFILE)
 	mkdir -p $(DISTDIR)
 	@echo zipping $< ...
@@ -65,10 +68,11 @@ dist: $(DISTDIR)/$(EXECUTIONFILE).zip
 install:
 	echo "Installing is not supported"
 
-# Builder uses this target to run your application.
+# Builder uses this target to run the application.
 run:
 	$(BINDIR)/$(EXECUTIONFILE)
 
+#clean directrories
 clean:
 	$(RM) -r -f $(OBJDIR)
 	$(RM) -r -f $(BINDIR)

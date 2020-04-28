@@ -6,7 +6,6 @@ double xlogofx_y_inv(double y){
 	
 	double x_n;
 	double x_np1;
-	double lgy;
 	if(y<0){
 		fprintf(stderr,"Negativ y not officially supported in xlogofx_y_inv\n");
 	}

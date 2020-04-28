@@ -15,20 +15,24 @@
  * 						Deleted integrate_cos
  * 						Refreshed convergeintegrate to generalform
  * 						Added integrate
+ *  @date 28.04.2020	Moved derivate,root,integral functions 
+ * 						to seperate moduls
+ * 
  *  @todo cheack in valtable rather ferror gets set if the file does not exist
  * 
  *  @test -
  * 
  *  @bug No known bugs  
  * 
- *  @version 0.3  
+ *  @version 0.4
  */
  
 #ifndef MATFPFCTNS_H
 #define MATFPFCTNS_H
 
 /**
- * @fn int valtable_double(double (*fp)(double),char* filename,double step, double start, double end);
+ * @fn int valtable_double(double (*fp)(double),char* filename,double step, 
+ * 						double start, double end);
  * @brief Function to calculate a value table of a given function
  *
  * The given function ("fp") needs to have 1 dimensional In- and Output
@@ -42,233 +46,8 @@
  * 
  * @return 1:Some Error, 0: No Error
  */
-int valtable_double(double (*fp)(double),char* filename,double step, double start, double end);
-
-
-
-/**
- * @fn double symfirstderivative(double x,double h,double (*fp)(double));
- * @brief Approximates the first derivative of the function "fp" at "x"
- *
- * Approximates the first derivative of "fp" at "x" using Taylor-formula 
- * (till order of h²) of f(x+h) and f(x-h).
- *
- * @param x Point of interest
- * @param h Step size 
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the first derivative of "fp" at "x"
- */
-double symfirstderivative(double x,double h,double (*fp)(double));
-
-
-
-/**
- * @fn double symfirstderivativeoptimized(double x,double (*fp)(double));
- * @brief Approximates the first derivative of the function "fp" at "x"
- *
- * Approximates the first derivative of "fp" at "x" using Taylor-formula 
- * of f(x+h) and f(x-h).
- * h was chosen to optimize preciscion.
- *
- * @param x Point of interest
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the first derivative of "fp" at "x"
- */
-double symfirstderivativeoptimized(double x,double (*fp)(double));
-
-
-
-/**
- * @fn double symsecondderivative(double x,double h,double (*fp)(double));
- * @brief Approximates the second derivative of the function "fp" at "x"
- *
- * Approximates the second derivative of "fp" at "x" using Taylor-formula 
- * (till order of h³) of f(x+h),f(x) and f(x-h).
- *
- * @param x Point of interest
- * @param h Step size 
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the second derivative of "fp" at "x"
- */
-double symsecondderivative(double x,double h,double (*fp)(double));
-
-
-
-/**
- * @fn double symsecondderivativeoptimized(double x,double (*fp)(double));
- * @brief Approximates the second derivative of the function "fp" at "x"
- *
- * Approximates the second derivative of "fp" at "x" using Taylor-formula 
- * of f(x+h),f(x) and f(x-h).
- * h was chosen to optimize preciscion.
- *
- * @param x Point of interest
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the second derivative of "fp" at "x"
- */
-double symsecondderivativeoptimized(double x,double (*fp)(double));
-
-
-
-/**
- * @fn double symsecondderivative(double x,double h,double (*fp)(double));
- * @brief Approximates the third derivative of the function "fp" at "x"
- *
- * Approximates the third derivative of "fp" at "x" using Taylor-formula 
- * (till order of h³) of f(x+2h),f(x+h),f(x),f(x-h) and f(x-2h).
- *
- * @param x Point of interest
- * @param h Step size 
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the third derivative of "fp" at "x"
- */
-double symthirdderivative(double x,double h,double (*fp)(double));
-
-
-
-/**
- * @fn double symthirdderivativeoptimized(double x,double (*fp)(double));
- * @brief Approximates the third derivative of the function "fp" at "x"
- *
- * Approximates the third derivative of "fp" at "x" using Taylor-formula 
- * of f(x+2h),f(x+h),f(x),f(x-h) and f(x-2h).
- * h was chosen to optimize preciscion.
- *
- * @param x Point of interest
- * @param fp Math function pointer to function to derive
- * 
- * @return Approximation of the third derivative of "fp" at "x"
- */
-double symthirdderivativeoptimized(double x,double (*fp)(double));
-
-
-
-/**
- * @fn double rootsecant(double a,double b,double (*fp)(double),
- * 						double precision);
- * @brief Approximates the root of "fp" using the classical secant method
- *
- * Approximates the root of "fp"(must not be the nearest root!)
- * using the classical secant method
- * with the start values "a" and "b".
- *
- * @param a First start value
- * @param b Second start value
- * @param fp Math function pointer to function to use
- * @param precision Precision to which the root should be determined
- * 
- * @return Approximation of the root of "fp"
- */
-double rootsecant(double a,double b,double (*fp)(double),double precision);
-
-
-
-/**
- * @fn double rootmodifiedsecant(double start,double (*fp)(double),
- * 								double precision);
- * @brief Approximates the root of "fp" using the modified secant method
- *
- * Approximates the nearest root of "fp"
- * using the modified secant method
- * with the start value "start".
- *
- * @param start Start value
- * @param fp Math function pointer to function to use
- * @param precision Precision to which the root should be determined
- * 
- * @return Approximation of the root of "fp"
- */
-double rootmodifiedsecant(double start,double (*fp)(double),double precision);
-
-
-
-/**
- * @fn double rootbisection(double start,double end, double(*fp)(double),
- * 							double precision);
- * @brief Approximates the root of "fp" using the bisection method
- *
- * Approximates the root in the intervall ["start","end"] of "fp"
- * using the bisection method.
- *
- * @param start Start value of the intervall
- * @param end End value of the intervall
- * @param fp Math function pointer to function to use
- * @param precision Precision to which the root should be determined
- * 
- * @return Approximation of the root of "fp"
- */
-double rootbisection(double start,double end, double(*fp)(double),
-					 double precision);
-
-
-
-/** @fn double integrate(double* weights,double* x_sampling_points,int n,
- * 						double (*fp)(double));
- * @brief Approximates the integral of "fp"
- * 
- * Approximates the integral of "fp" using the given weights and steps
- * 
- * @param weights	Array of the weights for the sampling points
- * @param x_sampling_points	Array of sampling points
- * @param n		Amount of sampling points
- * @param fp	Math function pointer to function to integrate
- */
-double integrate(double* weights,double* x_sampling_points,int n,
-				 double (*fp)(double));
-
-
-
-/**
- * @fn double integratetrapez(double start, double end,double (*fp)(double), 
- * unsigned int n);
- * @brief approximates the integral of "fp" by trapezsum
- *
- * Approximates the integral of "fp" by trapezsum
- * over "n" subintervalls in ["start","end"]
- * The given function ("fp") needs to have 1 dimensional In- and Output
- *
- * @param start Start value of the integral
- * @param end End value of the integral
- * @param fp Math function pointer to function to integrate
- * @param n Amount of subintervalls in ["start","end"]
- * @param variables Array of the variables
- * 
- * @return Value of the approximated integral
- */
-double integratetrapez(double start,double end,double (*fp)(double*),
-					   unsigned int n,double* variables);
-
-
-
-/**
- * @fn double convergeintegrate_homogenstepcount(double start,double end,
- * 				double (*fp)(double),double precision,const int startisminfty,
- * 				const int endisinfty);
- * @brief approximates the integral of "fp" to the specifed "precision"
- *
- * Approximates the integral of "fp" using "integratetrapez"
- * and the specifed "precision"
- * The given function ("fp") needs to have 1 dimensional In- and Output.
- * 
- * @param start Start value of the integral
- * @param end End value of the integral
- * @param fp Math function pointer to function to integrate
- * @param precision Relative precision
- * @param integrate_fp Function to use to integrate
- * @param startisminfty Say rather the start is -infty
- * @param endisinfty Say rather the end is infty
- * @param variables Array of the variables
- * 
- * @return Value of the approximated integral
- */
-double convergeintegrate_homogenstepcount(double start,double end,
-		double (*fp)(double*),double precision,
-		const int startisminfty,const int endisinfty,double* variables);
+int valtable_double(double (*fp)(double),char* filename,double step, 
+					double start, double end);
 
 
 #endif //ifndef MATFPFCTNS_H

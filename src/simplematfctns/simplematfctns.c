@@ -1,6 +1,6 @@
 #include "simplematfctns.h"
 #include "../generalmemorymanager/generalmemorymanager.h"
-#include "../matfpfctns/matfpfctns.h"
+#include "../integrate_trapez/integrate_trapez.h"
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
