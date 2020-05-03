@@ -1,5 +1,7 @@
 #include <math.h>
 #include "integrate_trapez.h"
+#include "../generalmemorymanager/generalmemorymanager.h"
+#include <stdio.h>
 double integrate(double* weights,double* x_sampling_points,int n,
 				 double (*fp)(double)){
 	/**
@@ -72,7 +74,48 @@ double integratetrapez(double start,double end,double (*fp)(double*),
 	return sum*subintervalllength;
 }
 
+double integratetrapez_posinf(double lowerboundary,
+					   double (*fp)(double*),double subintervalllength,
+					   double* variables,double relprecision){
+	/**
+	 * Declarations:
+	 * 
+	 * @var i		itteration variable
+	 * @var sum		value of the sum
+	 * @var f_x_i	f(x_i)
+	 */
+	
+	int i=1;
+	double sum=0.0;
+	double f_x_i=0.0;
+	
+	/**
+	 * @note	Calculate f(x_0) and add it to the sum with weight 0.5
+	 */
+	variables[0]=lowerboundary;
+	sum=(*fp)(variables)/2.;
+	
+	/**
+	 * @note	f(x_i) gets calulated and added to the sum,
+	 * 			until the f(x_i)<sum*relprecision.
+	 */
 
+	do{
+		variables[0]=lowerboundary+subintervalllength*i;
+		f_x_i=(*fp)(variables);
+		sum+=f_x_i;
+		i++;
+		//printf("%e,%e,i=%d\n",f_x_i,sum,i);
+	}while((fabs(f_x_i)>fabs(relprecision))||(fabs(f_x_i)>fabs(sum*relprecision)));
+	//printf ("-\n");
+	/**
+	 * @note	Calculate f(x_n) (n last relevant index)
+	 * 			and add it to the sum with weight 0.5
+	 */
+	variables[0]=lowerboundary+(i+1)*subintervalllength;
+	sum+=(*fp)(variables)/2.;
+	return sum*subintervalllength;
+}
 
 double convergeintegrate_homogenstepcount(double start,double end,
 		double (*fp)(double*),double relprecision,
@@ -165,4 +208,77 @@ double convergeintegrate_homogenstepcount(double start,double end,
 		new=integratetrapez(start,end,fp,n,variables,0.,0);
 	}while(fabs(new-oldb_steps)>fabs(relprecision*new));
 	return new;
+}
+
+
+double integrate_trapez_hd_cube(int dimensions,double lowerboundary,
+								 double upperboundary,int n,
+								 double (*fp)(double *,int dim)){
+	double h;
+	double* x;
+	int* index;
+	double sum=0.;
+	double summand=0.;
+	
+	x=(double*)mem_alloc (dimensions*sizeof (double));
+	index=(int*)mem_alloc (dimensions*sizeof (int));
+	
+	for(int i=0;i<dimensions;i++){
+		index[i]=0;
+		x[i]=lowerboundary;
+	}
+	h=(upperboundary-lowerboundary)/n;
+	/*for(int i=0;i<=n;i++){
+		x[0]=lowerboundary+i*h;
+		for(int j=0;j<=n;j++){
+			x[1]=lowerboundary+j*h;
+			for(int k=0;k<=n;k++){
+				x[2]=lowerboundary+k*h;
+				summand=fp(x,3);
+				//printf("1:%e\n",summand);
+				if(i==0||i==n){
+					summand/=2.;
+				}
+				if(j==0||j==n){
+					summand/=2.;
+				}
+				if(k==0||k==n){
+					summand/=2.;
+				}
+				
+				sum+=summand;
+				//printf("2:summand=%e,sum=%e\n",summand,sum);
+			}
+			
+		}
+		
+	}*/
+	
+	dimstager (0,x,index,&dimensions,&summand,&sum,&n,&h,&lowerboundary,fp);
+	return sum*pow (h, dimensions);
+}
+
+
+void dimstager(int stage,double* x,int* index,int* dim,double *summand,
+				 double* sum, int* n,double* h,double *lowerboundary,
+				 double (*fp)(double *,int dim)){
+	//printf ("%d\n",stage);
+	if(stage<(*dim-1)){
+		for(index[stage]=0;index[stage]<=*n;index[stage]++){
+			x[stage]=*lowerboundary+index[stage]**h;
+			dimstager (stage+1, x, index, dim,summand,sum, n, h, lowerboundary,fp);
+		}
+	}else{
+		for(index[stage]=0;index[stage]<=*n;index[stage]++){
+			x[stage]=(*lowerboundary)+(*h)*((double)index[stage]);
+			*summand=fp(x,*dim);
+			for(int i=0;i<*dim;i++){
+				if(index[i]==0||index[i]==*n){
+					*summand/=2.;
+				}
+			}
+			*sum+=*summand;
+		}
+	}
+	
 }

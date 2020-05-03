@@ -20,6 +20,8 @@ OBJDIR := obj
 BINDIR := bin
 SRCDIR := src
 DISTDIR := dist
+DATADIR := data
+PYTHDIR := pyth
 
 EXECUTIONFILE := test
 
@@ -68,9 +70,18 @@ dist: $(DISTDIR)/$(EXECUTIONFILE).zip
 install:
 	echo "Installing is not supported"
 
+#plot
+plot:
+	python3 $(PYTHDIR)/simpleplotter.py
+
+#main calculation
+calc:
+	$(BINDIR)/$(EXECUTIONFILE)
+
 # Builder uses this target to run the application.
 run:
-	$(BINDIR)/$(EXECUTIONFILE)
+	make calc
+	make plot
 
 #clean directrories
 clean:
