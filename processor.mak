@@ -81,7 +81,6 @@ calc:
 # Builder uses this target to run the application.
 run:
 	make calc
-	make plot
 
 #clean directrories
 clean:
