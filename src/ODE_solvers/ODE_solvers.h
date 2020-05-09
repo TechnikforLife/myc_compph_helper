@@ -49,6 +49,9 @@ void trapez(int noeq, double h, double t, double *y,
 void RK3(int noeq, double h, double t, double *y,
 		   void (*dgl_rs) (int, double ,double *, double*),int call);
 
+void RK4(int noeq, double h, double t, double *y,
+		   void (*dgl_rs) (int, double ,double *, double*),int call);
+
 void runge_kutta(int noeq,double h, double t,double *y,
 				 void (*dgl_rs) (int, double ,double *, double*),
 				 int p,double* a,double* b,double* c,double* k,double* yh);
