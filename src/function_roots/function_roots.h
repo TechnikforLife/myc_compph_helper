@@ -7,6 +7,7 @@
  * 
  *  @date 28.04.20	Reorganisation of functions from matfpfctns 
  * 					to function_roots
+ *  @date 23.05.20	Added division by zero prevention
  * 
  *  @todo -
  * 
@@ -14,7 +15,7 @@
  * 
  *  @bug No known bugs  
  * 
- *  @version 0.1 
+ *  @version 1.2 
  */
 
 #ifndef FUNCTION_ROOTS_H

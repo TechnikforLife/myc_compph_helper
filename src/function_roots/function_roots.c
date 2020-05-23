@@ -24,12 +24,18 @@ double rootsecant(double a,double b,double (*fp)(double),double precision){
 	 * 			and to the given precision.
 	 */
 	for(i=0;i<10000;i++){
-		x_ip1=x_i+(fp(x_i)*(x_im1-x_i))/(fp(x_i)-fp(x_im1));
+		if(fp(x_im1)<1e-250&&fp(x_i)<1e-250){
+			x_ip1=x_i;
+		}else{
+			x_ip1=x_i+(fp(x_i)*(x_im1-x_i))/(fp(x_i)-fp(x_im1));
+		}
+		
 		if(fabs(x_ip1-x_i)<precision){
 			break;
 		}
 		x_im1=x_i;
 		x_i=x_ip1;
+		//printf ("%d %30.20e %30.20e %30.20e\n",i,x_ip1,fp(x_i),fp(x_im1));
 	}
 	if(i==10000){
 		printf("[WARNING] Could not reach given precision!\n");

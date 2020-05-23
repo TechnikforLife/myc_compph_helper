@@ -9,12 +9,6 @@ WARNING := -Wall -Wpedantic
 OPTIMIZATION := -Og
 CFLAGS += $(PROFILING) $(DEBUG) $(WARNING) $(OPTIMIZATION)
 
-# Linker settings:
-LDFLAGS =
-LIBS := -lm -lgsl -lblas
-LDFLAGS += $(PROFILING) $(LIBS)
-
-
 # Directories:
 OBJDIR := obj
 BINDIR := bin
@@ -22,6 +16,13 @@ SRCDIR := src
 DISTDIR := dist
 DATADIR := data
 PYTHDIR := pyth
+GPDIR := gplot
+
+# Linker settings:
+LDFLAGS =
+LIBS := -lm -lgsl -lblas
+LDFLAGS += $(PROFILING) $(LIBS)
+
 
 EXECUTIONFILE := test
 
@@ -44,24 +45,24 @@ list-variables:
 # generate dependencies
 $(OBJDIR)/%.d : $(SRCDIR)/%.c
 	mkdir -p $(@D)
-	@echo finding headers of $< ...
+	@echo [make] finding headers of $< ...
 	$(CC) -MM -MT "$@ $(patsubst %.d,%.o,$@)" -MF $@ $<
 
 # compiling
 $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	@echo compiling $< ...
+	@echo [make] compiling $< ...
 	$(CC) $(CFLAGS) $< -o $@
 
 # linking
 $(BINDIR)/$(EXECUTIONFILE) : $(objects) processor.mak Makefile
-	@echo linking $@ ...
+	@echo [make] linking $@ ...
 	mkdir -p $(BINDIR)
 	$(CC) -o $@ $(objects) $(LDFLAGS)
 
 #distribute
 $(DISTDIR)/$(EXECUTIONFILE).zip: $(BINDIR)/$(EXECUTIONFILE)
 	mkdir -p $(DISTDIR)
-	@echo zipping $< ...
+	@echo [make] zipping $< ...
 	zip -r $(DISTDIR)/$(EXECUTIONFILE).zip $(BINDIR) $(SRCDIR) processor.mak Makefile
 
 dist: $(DISTDIR)/$(EXECUTIONFILE).zip
@@ -72,7 +73,9 @@ install:
 
 #plot
 plot:
-	python3 $(PYTHDIR)/simpleplotter.py
+	@echo [make] plotting ...
+	gnuplot $(GPDIR)/script.plt
+#python3 $(PYTHDIR)/simpleplotter.py
 
 #main calculation
 calc:
@@ -81,6 +84,7 @@ calc:
 # Builder uses this target to run the application.
 run:
 	make calc
+	make plot
 
 #clean directrories
 clean:
