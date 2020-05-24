@@ -28,7 +28,7 @@ double parafinder(double a,double b,double (*fp)(double,int*),double precision){
 	double fpi,fpim1,fpip1;
 	int info=0;
 	int w1=0,w2=0;
-	double abc=1e-7;//pow(maindat.n,-1.5);
+	//double abc=1e-7;//pow(maindat.n,-1.5);
 	/**
 	 * @note	Try to estimate the root of "fp" with the given startvalues
 	 * 			and to the given precision.
@@ -158,7 +158,7 @@ int main(){
 
     init_ittertable(0.0,rmax,&maindat,fg,fs); 
 	maindat.n=10/maindat.h+1;
-	para=rootsecant(0, 1, &f_rand,1e-12);
+	para=parafinder(0, 1, &f_randbed,1e-12);
 	printf("#Parameter, Null und Schrittweite: %15.12e %15.6e %15.6e\n",para,
 		   zero,maindat.h);
 	for(double j=10;j<=rmax;j+=10){
