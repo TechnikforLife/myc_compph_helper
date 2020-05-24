@@ -1,6 +1,6 @@
 #include <math.h>
 #include "numerov.h"
-void init_numerov(double start,double end,numerov_data_t* dat,
+void init_ittertable(double start,double end,numerov_data_t* dat,
 					double(*fg)(double),double(*fs)(double)){
 	dat->h=(end-start)/(dat->n-1);
 	for(int i=0; i<dat->n; i++){
@@ -22,9 +22,7 @@ void numerovup(numerov_data_t dat,int steps,double y0, double y1,double *y){
 		fakt_u_nm1=1.0+dat.h*dat.h*dat.g[i-1]/12.;
 		fakt_s=dat.h*dat.h/12.0*(dat.s[i+1]+10.0*dat.s[i]+dat.s[i-1]);
 		y[i+1]=(fakt_s+2.0*fakt_u_n*y[i]-fakt_u_nm1*y[i-1])/fakt_u_np1; /* Vorwaertsiteration */ 
-		if(fabs(y[i+1]-y[i])>fabs (y[i])&&i*dat.h>10){
-			y[i+1]=y[i]*0.9;
-		}
+		
 	}
 }
 void numerovdown(double *r,double *g,double *s,double h,int n,int steps,

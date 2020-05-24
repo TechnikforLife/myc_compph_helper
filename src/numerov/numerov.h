@@ -21,7 +21,7 @@ typedef struct numerovdata{
 	double  h;
 	int  n;
 }numerov_data_t;
-void init_numerov(double start,double end,numerov_data_t* dat,
+void init_ittertable(double start,double end,numerov_data_t* dat,
 					double(*fg)(double),double(*fs)(double));
 
 void numerovup(numerov_data_t dat,int steps,double y0,double y1,double *y);
